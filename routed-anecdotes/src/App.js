@@ -61,6 +61,11 @@ const CreateNew = (props) => {
   const content = useField('content')
   const author = useField('author')
   const info = useField('info')
+
+  // i think can also do this to remove the warning when returning reset
+  // from useField
+  //  const { reset: infoReset, ...info } = useField('info');
+  // in handleReset can call infoReset()
   
   // const [content, setContent] = useState('')
   // const [author, setAuthor] = useState('')
@@ -85,6 +90,7 @@ const CreateNew = (props) => {
     info.reset()
   }
 
+  // reset ='' to remove the warnings
   return (
     <div>
       <h2>create a new anecdote</h2>
