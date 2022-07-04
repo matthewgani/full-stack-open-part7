@@ -1,6 +1,3 @@
-import {
-} from "react-router-dom"
-
 
 const Anecdote = ({anecdote}) => {
 
