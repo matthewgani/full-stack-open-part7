@@ -7,21 +7,45 @@ const useField = (type) => {
   const onChange = (event) => {
     setValue(event.target.value)
   }
+  const reset = () => {
+    setValue('')
+  }
 
   return {
     type,
     value,
-    onChange
+    onChange,
+    reset
   }
 }
 
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
 
-  // ...
 
-  const create = (resource) => {
-    // ...
+  const getAll = async () => {
+    const response = await axios.get(baseUrl)
+    return response.data
+  }
+
+  useEffect(()=> {
+    const getAllResource = async () => {
+      let res = await axios.get(baseUrl)
+      setResources(res.data)
+    }
+    getAllResource()
+  }, [baseUrl])
+
+
+  const create = async (resource) => {
+    console.log(resource)
+    let obj = {
+      ...resource
+    }
+    const response = await axios.post(baseUrl, obj)
+    let all = await getAll()
+    setResources(all)
+    return response.data
   }
 
   const service = {
@@ -44,26 +68,29 @@ const App = () => {
   const handleNoteSubmit = (event) => {
     event.preventDefault()
     noteService.create({ content: content.value })
+    content.reset()
   }
  
   const handlePersonSubmit = (event) => {
     event.preventDefault()
     personService.create({ name: name.value, number: number.value})
+    name.reset()
+    number.reset()
   }
 
   return (
     <div>
       <h2>notes</h2>
       <form onSubmit={handleNoteSubmit}>
-        <input {...content} />
+        <input {...content} reset ='' />
         <button>create</button>
       </form>
       {notes.map(n => <p key={n.id}>{n.content}</p>)}
 
       <h2>persons</h2>
       <form onSubmit={handlePersonSubmit}>
-        name <input {...name} /> <br/>
-        number <input {...number} />
+        name <input {...name} reset = ''/> <br/>
+        number <input {...number} reset = ''/>
         <button>create</button>
       </form>
       {persons.map(n => <p key={n.id}>{n.name} {n.number}</p>)}
